@@ -1,0 +1,22 @@
+{
+  "name": "file_scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --build",
+    "build": "pkg index.js"
+  },
+  "keywords": [],
+  "author": "Tevž Beškovnik",
+  "license": "ISC",
+  "devDependencies": {
+    "nexe": "^3.3.7"
+  },
+  "dependencies": {
+    "pdf-to-excel": "^0.3.0",
+    "pdfreader": "^1.2.7",
+    "read-excel-file": "^4.1.0",
+    "xlsx-writestream": "^0.5.1"
+  }
+}
