@@ -18,6 +18,6 @@ After downloading it, place it to your desired location and open *"start.bat"*. 
     Turns on debug mode, at the start logs current working directory and where the documents folder is located, then starts logging every event in the program when it gets called     and writes it to *"debug.log"*.
     
  * **sDir pathToDirectory**
-    Sets the spool direcotry to a new one, by default it uses the *"C:/Windows/System32/spool/PRINTERS"* directory where the .spl files are created by windows.
+    Sets the spool direcotry to a new one, by default it uses the *C:/Windows/System32/spool/PRINTERS* directory where the .spl files are created by windows.
     
 **Any of the above mentioned configurations can be reset or changed by restarting the program.**
