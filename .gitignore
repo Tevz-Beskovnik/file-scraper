@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+*.pdf
+
+out/lol.txt
+
+out/xlsx/naročila.xlsx
