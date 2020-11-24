@@ -104,7 +104,7 @@ rl.question("Mapa za izhodne datoteke:", (anw) => {
 })
 
 //naredi write stream za debug logs
-let debugLogs = fs.createWriteStream(cwd() + "/file_scraper/debug.log", {flags: 'a'});
+let debugLogs = fs.createWriteStream(cwd() + "/debug.log", {flags: 'a'});
 
 /*
 namenjen za razvijanje ni uporabniku uporabno 
@@ -169,86 +169,12 @@ function watcher(){
                 datoteke, ki se bodo predale printerju
                 tukaj kopiram .SPL datoteko
                 */
-                fs.createReadStream(spoolDir+"/"+filename).pipe(fs.createWriteStream(name));
+                fs.createReadStream(spoolDir+"/"+filename).pipe(fs.createWriteStream("./out/" + name));
 
                 //naredi novi podproces, ki izvede print na virtualnem printerju z pridobljeno spl datoteko
-                let spool = spawn('C:/Users/tevzb/Desktop/gmi/file_scraper/src/spool.exe', [name, difPrinter]);
-            
-                /*
-                če, med poskušanjem, ali izvajanjem
-                nastane napaka, jo tukaj zazna in jo izpiše
-                */
-                spool.on('error', (err) => {
-                    console.log(`Got error: ${err}`);
-                });
-
-                //izpiše s katero kodo se je zaključil program OK: 0, SLABO: 1;
-                spool.on('exit', (code) => {
-
-                    //debug
-                    debugMode ? debugLogs.write("IN EXIT EVENT FOR SPOOL.EXE\n") : '';
-                    debugMode ? debugLogs.write(new Date().toLocaleDateString('si-SI') + "-" + new Date().toLocaleTimeString('si-SI') + ": " + `Program exited with code: ${code}` + "\n") : '';
-                });
-
-                /*
-                zamik, med časom kadar se datoteka izbriše,
-                ker drugače se program sesuje (ne vem točno zakaj)
-                */
-                let delInterval;
-
-                //debug
-                !debugMode ? delInterval = setInterval(() => {
-                    debugMode ? debugLogs.write("IN .SPL DELETE CYCLE\n") : ''
-                    if(fs.existsSync(name)){
-                        debugMode ? debugLogs.write("IN .SPL DELETE CYCLE IF STATEMENT\n") : ''
-                        fs.unlink(name, err => {
-                            debugMode ? debugLogs.write("IN .SPL DELETE CYCLE UNLINK FUNCTION\n") : ''
-                            err ? ' ' : clearInterval(delInterval);
-                        });
-                    }
-                }, 1000) : '';
-
-                /*
-                razmik med časom v katerim se končna datoteka,
-                kopira v izhodno mapo, saj če jo prej kopiram,
-                printanje ne bo končano in se bo program sesu
-                */
-                //#region copy pdf
-                setTimeout(() =>{
-                    let docName = name.split(".");
-                    docName.pop();
-                    docName = docName.join(".") + ".pdf";
-
-                    try{
-                        debugMode ? debugLogs.write("IN TRY CATCH LOOP\n") : '';
-                        if(fs.existsSync(dokumenti + name + ".pdf")){
-                            debugMode ? debugLogs.write("IN TRY CATCH LOOP CHECKS IF FILE EXISTS IF\n") : '';
-                            let wrs = fs.createWriteStream(output + "/out/" + docName);
-                            fs.createReadStream(dokumenti + name + ".pdf").pipe(wrs);
-                            debugMode ? debugLogs.write("IN TRY CATCH LOOP\n") : '';
-                            wrs.on('finish', () => {
-                                debugMode ? debugLogs.write("IN TRY CATCH LOOP FINISHED WRITTING OUTPUT\n") : '';
-
-                                /*
-                                zamik med brisanjem datoteke po temu ko se kopira,
-                                saj verjamem, da se bo program drugače sesu.
-                                */
-                                fs.unlink(dokumenti + name + ".pdf", err => {
-                                    debugMode ? debugLogs.write("IN TRY CATCH LOOP DELETING FILE IN\n") : '';
-                                    err ? 
-
-                                        //debug
-                                        debugMode ? console.log(err) : ''
-                                        : '';
-                                    return watcher();
-                                });
-                            });
-                        }
-                    }catch(err){
-                        debugMode ? console.log(err) : '';
-                    }
-                }, 1000);
-                //#endregion
+                if(fs.existsSync("./out/" + name)){
+                    
+                }
             }
         }
     });
@@ -256,7 +182,7 @@ function watcher(){
 
 watcher();
 
-var errorLog = fs.createWriteStream(cwd() + "/file_scraper/error.log", {flags: 'a'});
+var errorLog = fs.createWriteStream(cwd() + "/error.log", {flags: 'a'});
 
 process.on('uncaughtException', (err) => {
     console.log('Cought error: ' + err);
