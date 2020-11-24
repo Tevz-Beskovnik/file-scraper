@@ -2,4 +2,4 @@
 
 ### What is it used for?
 
-**File scraper
+* **File scraper**
