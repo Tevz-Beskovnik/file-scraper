@@ -18,85 +18,72 @@ podatki pretvorjeni iz .spl v berjiv javascript objekt ali tudi JSON.
 let form;
 
 const map = {
-    "ŠTEVILKA DOBAVNICE": 'stDobavnice',
-    "DATUM": 'datum',
-    "ŠTEVILKA NAROČILA": "stNarocila",
-    "IME IN NASLOV KUPCA": "imeInNaslovKupca",
-    "NAZIV IN KRAJ GRADBISCA": "nazivInKrajGradbisca",
-    "KOLICINA BETONA V M3": "kolicinaBetonaVM3",
-    "OZNAKA RECEPTURE": "oznakaRecepture",
-    "ŠIFRA": "sifra",
-    "TRDNOSTNI RAZRED": 'trdnostniRazred',
-    "VRSTA BETONA": "vrstaBeton",
-    "NAJVEČJE ZRNO AGREGATA": "največjeZrnoAgregata",
-    "STOPNJA POSEDA": "stopnjaPoseda",
-    "STOPNJA IZPOSTAVLJENOSTI": "stopnjaIzpostavljenosti",
-    "RAZRED VSEBNOSTI KLORIDA": "razredVsebnostiKlorida",
-    "DOD1": "dot1",
-    "DOD2": "dot2",
-    "DOD3": "dot3",
-    "KOL1": "kol1",
-    "KOL2": "kol2",
-    "KOL3": "kol3",
-    "OZNAKA CEMENTA": "oznakaCementa",
-    "SKLADNOSTS S SIST": "skladnostSSist",
-    "CAS STIKA PRVEGA CEMENTA Z VODO": "casStikaPrvegaCementaZVodo",
-    "ČAS POLNJENJA V MIN": "casPolnjenjaVMin",
-    "REGISTERSKA ŠTEVILKA AVTA": "registerskaŠtevilkaAvta",
-    "PREDAL": "predal",
-    "PREVZEL": "prevzel",
+    "ŠTEVILKA DOBAVNICE": 'ŠTEVILKA DOBAVNICE',
+    "DATUM": 'DATUM',
+    "ŠTEVILKA NAROČILA": "ŠTEVILKA NAROČILA",
+    "IME IN NASLOV KUPCA": "IME IN NASLOV KUPCA",
+    "NAZIV IN KRAJ GRADBISCA": "NAZIV IN KRAJ GRADBISCA",
+    "KOLICINA BETONA V M3": "KOLICINA BETONA V M3",
+    "OZNAKA RECEPTURE": "OZNAKA RECEPTURE",
+    "ŠIFRA": "ŠIFRA",
+    "TRDNOSTNI RAZRED": 'TRDNOSTNI RAZRED',
+    "VRSTA BETONA": "VRSTA BETONA",
+    "OZNAKA CEMENTA": "OZNAKA CEMENTA",
+    "REGISTERSKA ŠTEVILKA AVTA": "REGISTERSKA ŠTEVILKA AVTA",
+    "PREDAL": "PREDAL",
+    "PREVZEL": "PREVZEL",
 }
 
-fp.parser("./out/Cas-11.46.58_Dat-2020-11-24.SPL", l => {
-    let naslov;
-    l[17].replace(/([0-9]+\w)|[0-9]+/g, x => naslov = x);
-    let polniNaslov = l[17].split(naslov)[0] + naslov + l[14] + l[17].split(naslov+"  ")[1];
-    polniNaslov = polniNaslov.split("  ").join(" ");
-    let dot1 = Number(l[33].split("  ")[2]) != NaN || undefined ? l[33].split("  ")[2]: '', dot2 = Number(l[35].split("  ")[2]) != NaN || undefined ? l[35].split("  ")[2]: '', dot3 = Number(l[37].split("  ")[2]) != NaN || undefined ? l[37].split("  ")[2]: '';
-    let kol1 =  l[33].split("  ")[3] != undefined ? l[33].split("  ")[3] : '', kol2 = l[35].split("  ")[3] != undefined ? l[35].split("  ")[3] : '', kol3 = l[37].split("  ")[3] != undefined ? l[37].split("  ")[3] : '';
-    if(l[33].split("  ")[3] == undefined && l[35].split("  ")[3] == undefined && l[37].split("  ")[3] == undefined){
-        kol1 = dot1, kol2 = dot2, kol3 = dot3;
-        dot1 = "", dot2 = "", dot3 = "";
-    }
-    form = {
-        someHeader: l[0],
-        stDobavnice: l[5],
-        datum: l[7],
-        stNarocila: l[11],
-        imeInNaslovKupca: polniNaslov,
-        nazivInKrajGradbisca: l[22],
-        nazivInKrajGradbisca2: l[23],
-        kolicinaBetonaVM3: l[25],
-        oznakaRecepture: l[27].split("  ")[0],
-        sifra: l[27].split("  ")[1],
-        trdostniRazred: l[29] != undefined ? l[29] : '',
-        vrstaBetona: l[31] != undefined ? l[31] : '',
-        največjeZrnoAgregata: l[33].split("  ")[1],
-        stopnjaPoseda: l[35].split("  ")[1],
-        stopnjaIzpostavljenosti: l[37].split("  ")[1],
-        razredVsebnostiKlorida: l[39] != undefined ? l[39] : '',
-        dodatki: {
-            dot1: {
-                dod: dot1,
-                kol: kol1
-            },
-            dot2: {
-                dod: dot2,
-                kol: kol2
-            },
-            dot3: {
-                dod: dot3,
-                kol: kol3
+module.exports = {
+    "addFile": (file) => {
+        fp.parser(file, l => {
+            let naslov;
+            l[17].replace(/([0-9]+\w)|[0-9]+/g, x => naslov = x);
+            let polniNaslov = l[17].split(naslov)[0] + naslov + l[14] + l[17].split(naslov+"  ")[1];
+            polniNaslov = polniNaslov.split("  ").join(" ");
+            let ozR = l[27].split("  ")[1] != '' ? l[27].split("  ")[1] : '//';
+            let sif = l[27].split("  ")[1] != '' ? l[27].split("  ")[1] : '//';
+            let prevzel = l[64].split("  ")[2]
+            let form = {
+                stDobavnice: l[5],
+                datum: l[7],
+                stNarocila: l[11],
+                imeInNaslovKupca: polniNaslov,
+                nazivInKrajGradbisca: l[22] != '' ? l[22] : '//',
+                nazivInKrajGradbisca2: l[23] != '' ? l[23] : '//',
+                kolicinaBetonaVM3: l[25] != '' ? l[25] : '//',
+                oznakaRecepture: ozR,
+                sifra: sif,
+                trdostniRazred: l[29] != '' ? l[29] : '//',
+                vrstaBetona: l[31] != '' ? l[31] : '//',
+                oznakaCementa: l[40] != '' ? l[40] : '//',
+                regŠtAvta: l[60],
+                predal: l[64].split("  ")[1],
+                prevzel: prevzel.split("\\")[0]
             }
-        },
-        oznakaCementa: l[40],
-        skladnostsSSist: l[43],
-        casStikaPrvegaCementaZVodo: l[45].split("  ")[0],
-        casPolnjenjaVMin: l[45].split("  ")[1],
-        regŠtAvta: l[60],
-        predal: l[64].split("  ")[0],
-        prevzel: l[64].split("  ")[1]
-    }
-});
 
-ex.writeXlsx("./out/xlsx/naročila.xlsx", );
+            ex.readXlsx("./out/xlsx/naročila.xlsx", map, rows => {
+                let end = rows;
+                
+                end.push({
+                    "ŠTEVILKA DOBAVNICE": form.stDobavnice,
+                    "DATUM": form.datum,
+                    "ŠTEVILKA NAROČILA": form.stNarocila,
+                    "IME IN NASLOV KUPCA": form.imeInNaslovKupca,
+                    "NAZIV IN KRAJ GRADBISCA": form.nazivInKrajGradbisca,
+                    "KOLICINA BETONA V M3": form.kolicinaBetonaVM3,
+                    "OZNAKA RECEPTURE": form.oznakaRecepture,
+                    "ŠIFRA": form.sifra,
+                    "TRDNOSTNI RAZRED": form.trdostniRazred,
+                    "VRSTA BETONA": form.vrstaBetona,
+                    "OZNAKA CEMENTA": form.oznakaCementa,
+                    "REGISTERSKA ŠTEVILKA AVTA": form.regŠtAvta,
+                    "PREDAL": form.predal,
+                    "PREVZEL": form.prevzel,
+                })
+                console.log(end)
+                ex.writeXlsx("./out/xlsx/naročila.xlsx", end);
+            });
+        });
+    }
+}

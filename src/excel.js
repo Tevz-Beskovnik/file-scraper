@@ -131,14 +131,14 @@ class XlsxConverter {
         if(map != undefined){
 
             //prebere, datoteko z mapo
-            readXlsxFile(file, { map }).then(async ({ rows }) => {
-                callback(await rows);
+            readXlsxFile(file, { map }).then( ({ rows }) => {
+                callback(rows);
             });
         }else{
 
             //prebere datoteko brez mape
-            readXlsxFile(file).then(async rows => {
-                callback(await rows);
+            readXlsxFile(file).then( rows => {
+                callback(rows);
             });
         }
     }
@@ -153,6 +153,7 @@ class XlsxConverter {
         rows naj bo array objecktov, kjer so ključi imena stolpcev na vrhu in vrednosti, vrednosti v stolpcu
         */
         rows.map(r => {
+            console.log(r);
             writter.addRow(r);
         });
         
@@ -166,6 +167,7 @@ class XlsxConverter {
                 width: 10
             }]
         */
+
         columnWidth ? writter.defineColumns(columnWidth) : '';
     
         writter.finalize();

@@ -2,15 +2,14 @@
     
 */
 
-
+const { cwd } = require("process");
 const fs = require('fs');
 const readline = require('readline');
 
 module.exports = {
     'parser': (filename, callback) => {
-        if(!fs.existsSync(filename)) throw new TypeError("File with specified path: "+filename+", does not exist!", "index.js");
         const fileLines = readline.createInterface({
-            input: fs.createReadStream(filename),
+            input: fs.createReadStream("./out/" + filename),
             output: false,
             console: false
         });
@@ -22,6 +21,7 @@ module.exports = {
         });
 
         fileLines.on('close', () => {
+            console.log(lines);
             callback(lines);
         });
     }

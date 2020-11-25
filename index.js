@@ -18,6 +18,9 @@ PROBAJ ZAGNAT PROGRAM V CMD
 
 */
 
+//doda podatke datoteke v excel
+const { addFile } = require("./src/addXlsx")
+
 //util -> utility ¯\_(ツ)_/¯
 const util = require('util');
 
@@ -54,8 +57,6 @@ const spoolDir = "C:/Windows/System32/spool/PRINTERS";
 
 //importirane readllina
 const readline = require('readline');
-const { format } = require('path');
-const { debug } = require('console');
 
 //debug mode spremenljivka za debugganje
 let debugMode = false;
@@ -95,7 +96,7 @@ definira profil ime profila uporabnika, ki je na tem računalniku
 */
 
 rl.question("Mapa za izhodne datoteke:", (anw) => {
-    output = anw || cwd() + "\\file_scraper";
+    output = anw || cwd();
     console.log(output);
     rl.question("Tiskalnik:", (anw) => {
         difPrinter = anw || "Microsoft Print to PDF";
@@ -169,12 +170,19 @@ function watcher(){
                 datoteke, ki se bodo predale printerju
                 tukaj kopiram .SPL datoteko
                 */
-                fs.createReadStream(spoolDir+"/"+filename).pipe(fs.createWriteStream("./out/" + name));
+                let writter = fs.createWriteStream("./out/" + name)
+                fs.createReadStream(spoolDir + "/" + filename).pipe(writter);
 
                 //naredi novi podproces, ki izvede print na virtualnem printerju z pridobljeno spl datoteko
-                if(fs.existsSync("./out/" + name)){
-                    
-                }
+                writter.on("finish", () => {
+                    if(fs.existsSync("./out/" + name)){
+                        addFile(name)
+                        /*setTimeout(() => {
+                            fs.unlinkSync("./out/" + name);
+                        }, 500)*/
+                        watcher();
+                    }
+                });
             }
         }
     });
