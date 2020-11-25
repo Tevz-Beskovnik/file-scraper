@@ -108,3 +108,5 @@ dist
 out/lol.txt
 
 out/xlsx/naročila.xlsx
+
+*.SPL

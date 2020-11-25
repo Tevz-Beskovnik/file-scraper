@@ -31,6 +31,7 @@ const XLSXWriter = require('xlsx-writestream');
 const fs = require('fs');
 
 class XlsxConverter {
+    //now redundant due to not needing to conver pdfs anymore
     clean(text){
         /*
             Funkcija nareja da pretvori vse znake, ki so zaradi 
@@ -100,6 +101,7 @@ class XlsxConverter {
         return text.replace(regex, c => escapedSpecialChars[c]);
     }
 
+    //tudi reduntantno ker sploh ne shranjuem pdf več
     ConvPDF(file, output){
 
         //nov pdf parser
@@ -148,7 +150,7 @@ class XlsxConverter {
         writter.getReadStream().pipe(fs.createWriteStream(file));
         
         /* 
-        rows naj bo array objecktov, kjer so ključi imena stolpcev na vrhu in vrednosti vrednosti v stolpcu
+        rows naj bo array objecktov, kjer so ključi imena stolpcev na vrhu in vrednosti, vrednosti v stolpcu
         */
         rows.map(r => {
             writter.addRow(r);
