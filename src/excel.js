@@ -143,7 +143,7 @@ class XlsxConverter {
         }
     }
 
-    writeXlsx(file, rows, columnWidth) {
+    writeXlsx(file, rows) {
         let writter = new XLSXWriter(file, {});
         
         //file je lokacija datoteke.
@@ -152,8 +152,8 @@ class XlsxConverter {
         /* 
         rows naj bo array objecktov, kjer so ključi imena stolpcev na vrhu in vrednosti, vrednosti v stolpcu
         */
+
         rows.map(r => {
-            console.log(r);
             writter.addRow(r);
         });
         
@@ -167,10 +167,9 @@ class XlsxConverter {
                 width: 10
             }]
         */
-
-        columnWidth ? writter.defineColumns(columnWidth) : '';
     
         writter.finalize();
+        console.log("writter has finalized")
     }
 }
 

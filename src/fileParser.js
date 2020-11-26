@@ -21,7 +21,6 @@ module.exports = {
         });
 
         fileLines.on('close', () => {
-            console.log(lines);
             callback(lines);
         });
     }

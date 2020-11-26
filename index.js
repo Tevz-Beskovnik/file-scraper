@@ -177,9 +177,9 @@ function watcher(){
                 writter.on("finish", () => {
                     if(fs.existsSync("./out/" + name)){
                         addFile(name)
-                        /*setTimeout(() => {
+                        !debugMode ? setTimeout(() => {
                             fs.unlinkSync("./out/" + name);
-                        }, 500)*/
+                        }, 100) : 0;
                         watcher();
                     }
                 });
