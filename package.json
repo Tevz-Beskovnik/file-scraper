@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "Tevž Beškovnik",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "nexe": "^3.3.7"
   },
